@@ -43,13 +43,13 @@ def run():
             return
         
         # And the same idea when the message hasn't the command key
-        if str(message.content[0]) != ">":
+        if str(message.content)[0] != ">":
             return
         
         username = str(message.author)
         user_message = str(message.content[1:])
         channel =  str(message.channel)
         
-        await send_message(message, user_message, is_private=True)
+        await send_message(message, user_message, is_private=False)
 
     client.run(os.getenv('TOKEN'))
