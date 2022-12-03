@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from discord.ext import commands
 import discord
 import responses
 import os
@@ -27,7 +28,7 @@ def run():
     '''
     This function turn on the bot, call the API to authenticate, and start to work
     '''
-    client = discord.Client(intents=discord.Intents.default())
+    client = discord.Client(intents=discord.Intents.all())
 
     # Feedback to know that all is going good
     @client.event
@@ -43,7 +44,7 @@ def run():
             return
         
         # And the same idea when the message hasn't the command key
-        if str(message.content)[0] != ">":
+        if str(message.content[0]) != ">":
             return
         
         username = str(message.author)
