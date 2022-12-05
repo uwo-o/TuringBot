@@ -1,4 +1,5 @@
 import configparser
+import json
 import os
 
 def new_ask(message):
@@ -11,14 +12,14 @@ def new_ask(message):
         return "Solo es posible crear preguntas dentro del canal: **"+questions_channel+"**"
 
     question = " ".join(message.split()[1:])
-    return {
+    return json.dumps({
         "id": "question",
         "status": 0,
         "created_at": message.created_at,
         "user": message.display_name,
         "question": question,
         "answered_by": ""
-    }
+    }, indent=4)
 
 
 '''
