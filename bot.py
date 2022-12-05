@@ -50,7 +50,7 @@ def run():
         channel =  str(message.channel)
 
         # Calls the function that proccess the response in base to the command initiated
-        response = responses.handle_message(user_message)
+        response = responses.handle_message(message, user_message)
         
         await send_message(message, response["message"], is_private=message_privacy[response["id"]])
 
