@@ -6,6 +6,9 @@ import os
 # We load the .env file that is located in root path
 load_dotenv()
 
+message_privacy = {
+    "question": True
+}
 
 async def send_message(message, response:str, is_private:bool):
     '''
@@ -50,6 +53,6 @@ def run():
         # Calls the function that proccess the response in base to the command initiated
         response = responses.handle_message(user_message)
         
-        await send_message(message, response, is_private=False)
+        await send_message(message, response, is_private=message_privacy[response["id"]])
 
     client.run(os.getenv('TOKEN'))
