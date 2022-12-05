@@ -19,10 +19,14 @@ def new_ask(message):
             "id": "question",
             "status": 0,
             "created_at": message.created_at,
-            "user": message.display_name,
+            "user": message.author.display_name,
             "question": question,
             "answered_by": ""
         }, file)
+
+    position = len([file for file in os.listdir(config.QUESTIONS_PATH) if os.path.isfile(os.path.join(config.QUESTIONS_PATH, file))])
+
+    return "**[Turno: "+str(position)+"] "+str(message.author.display_name)+"** tu pregunta ha sido creada exitosamente!"
 
 
 '''
