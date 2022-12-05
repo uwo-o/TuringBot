@@ -1,10 +1,11 @@
 import configparser
+import config
 import json
 import os
 
 def new_ask(message):
 
-    config_parser = configparser.ConfigParser.read(open(os.path.dirname(os.path.abspath(__file__)+".conf")))
+    config_parser = configparser.ConfigParser.read(open(config.ROOT_PATH+".conf"))
 
     questions_channel = config_parser.get("GLOBAL", "QUESTIONS_CHANNEL")
 
@@ -12,14 +13,16 @@ def new_ask(message):
         return "Solo es posible crear preguntas dentro del canal: **"+questions_channel+"**"
 
     question = " ".join(message.split()[1:])
-    return json.dumps({
-        "id": "question",
-        "status": 0,
-        "created_at": message.created_at,
-        "user": message.display_name,
-        "question": question,
-        "answered_by": ""
-    }, indent=4)
+    
+    with open(config.QUESTIONS_PATH+message.created_at+".json", "w") as file:
+        json.dump({
+            "id": "question",
+            "status": 0,
+            "created_at": message.created_at,
+            "user": message.display_name,
+            "question": question,
+            "answered_by": ""
+        }, file)
 
 
 '''
