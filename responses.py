@@ -26,7 +26,10 @@ def new_ask(message):
 
     position = len([file for file in os.listdir(config.QUESTIONS_PATH) if os.path.isfile(os.path.join(config.QUESTIONS_PATH, file))])
 
-    return "**[Turno: "+str(position)+"] "+str(message.author.display_name)+"** tu pregunta ha sido creada exitosamente!"
+    return {
+        "id": "question",
+        "message": "**[Turno: "+str(position)+"] "+str(message.author.display_name)+"** tu pregunta ha sido creada exitosamente!"
+    }
 
 
 '''
