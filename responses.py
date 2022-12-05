@@ -12,8 +12,6 @@ def new_ask(message):
             "message":"Solo es posible crear preguntas dentro del canal: **"+questions_channel+"**"
             }
 
-    print(len(str(message.content).split()))
-
     if len(str(message.content).split()) == 1:
         return {
             "id": "question",
