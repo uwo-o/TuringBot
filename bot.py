@@ -7,7 +7,7 @@ import os
 load_dotenv()
 
 
-async def send_message(message, user_message:str, is_private:bool):
+async def send_message(message, response:str, is_private:bool):
     '''
     This function send a message to the user that runs a command
     The behavior is different, it has two options, private message
@@ -15,11 +15,8 @@ async def send_message(message, user_message:str, is_private:bool):
     '''
     
     try:
-        
-        # Calls the function that proccess the response in base to the commant initiated
-        response = responses.handle_message(user_message)
         await message.author.send(response) if is_private else await message.channel.send(response)
-        
+     
     except Exception as e:
         print(e)
 
@@ -46,10 +43,13 @@ def run():
         if str(message.content[0]) != ">":
             return
         
-        username = str(message.author)
+        username = str(message.author.display_name)
         user_message = str(message.content[1:])
         channel =  str(message.channel)
+
+        # Calls the function that proccess the response in base to the command initiated
+        response = responses.handle_message(user_message)
         
-        await send_message(message, user_message, is_private=False)
+        await send_message(message, response, is_private=False)
 
     client.run(os.getenv('TOKEN'))
