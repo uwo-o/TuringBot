@@ -1,25 +1,33 @@
-import configparser
 import config
 import json
 import os
 
 def new_ask(message):
 
-    config_parser = configparser.ConfigParser.read(open(config.ROOT_PATH+".conf"))
+    questions_channel = config.QUESTIONS_CHANNEL
 
-    questions_channel = config_parser.get("GLOBAL", "QUESTIONS_CHANNEL")
+    if str(message.channel) != questions_channel:
+        return {
+            "id": "question",
+            "message":"Solo es posible crear preguntas dentro del canal: **"+questions_channel+"**"
+            }
 
-    if message.channel != questions_channel:
-        return "Solo es posible crear preguntas dentro del canal: **"+questions_channel+"**"
+    print(len(str(message.content).split()))
 
-    question = " ".join(message.split()[1:])
+    if len(str(message.content).split()) == 1:
+        return {
+            "id": "question",
+            "message": "**"+str(message.author.display_name)+"** debes escribir tu pregunta luego del comando, de la forma:\n`>pregunta Esto es realmente un ejemplo?`"
+        }
+
+    question = " ".join(str(message.content).split()[1:])
     
-    with open(config.QUESTIONS_PATH+message.created_at+".json", "w") as file:
+    with open(config.QUESTIONS_PATH+str(message.created_at)+".json", "w") as file:
         json.dump({
             "id": "question",
             "status": 0,
-            "created_at": message.created_at,
-            "user": message.author.display_name,
+            "created_at": str(message.created_at),
+            "user": str(message.author.display_name),
             "question": question,
             "answered_by": ""
         }, file)
@@ -46,9 +54,9 @@ command_list = {
     "ayuda": 0
 }
 
-def handle_message(message:str):
+def handle_message(message, user_message:str):
     
-    command = message.split(" ")[0]
+    command = user_message.split()[0]
     
     if command not in command_list:
         return f"El comando '{command}' no existe. Para conocer los comandos utilice >ayuda"
