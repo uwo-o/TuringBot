@@ -1,14 +1,13 @@
 from dotenv import load_dotenv
 import discord
 import responses
+import config
 import os
 
 # We load the .env file that is located in root path
 load_dotenv()
 
-message_privacy = {
-    "question": True
-}
+message_privacy = config.message_privacy
 
 async def send_message(message, response:str, is_private:bool):
     '''
