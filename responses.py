@@ -12,6 +12,7 @@ def new_ask(message):
 
     question = " ".join(message.split()[1:])
     return {
+        "id": "question",
         "status": 0,
         "created_at": message.created_at,
         "user": message.display_name,
