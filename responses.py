@@ -24,7 +24,7 @@ def new_ask(message):
             "answered_by": ""
         }, file)
 
-    position = len([file for file in os.listdir(config.QUESTIONS_PATH) if os.path.isfile(os.path.join(config.QUESTIONS_PATH, file))])
+    position = len([file for file in os.listdir(config.QUESTIONS_PATH) if os.path.isfile(config.QUESTIONS_PATH+file)])
 
     return {
         "id": "question",
