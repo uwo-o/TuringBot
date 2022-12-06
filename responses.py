@@ -45,22 +45,43 @@ def new_ask(message):
         "message": f"**[Turno: {str(position)}] {str(message.author.display_name)}** tu pregunta ha sido creada exitosamente!"
     }
 
+def help(message):
+    return {
+        "id": "help",
+        "message": f"""Hola! **{message.author.display_name}** soy **TuringBot**, me encargo de ayudar a administrar el lugar :D
+Puedes interactuar conmigo usando los comandos, estos al ser llamados deben empezar con el simbolo: '>'.
+
+De la foma:
+`>comando`
+
+**Esta es la lista de los comandos:**
+
+**Pregunta:**
+`>pregunta PREGUNTA`. Con este comando puedes crear preguntas dentro del canal designado.
+Se creara una lista de espera, para que los y las ayudantes puedan responder a estas en orden de llegada.
+Cuando su pregunta sea respondida yo me encargare de avisate :D
+`Ejemplo: >pregunta Es esto realmente un ejemplo?`
+"""
+}
+
 
 '''
 This dictionary has the avalaibles commands as key and their
 respective function as value.
 '''
 command_list = {
-    "pregunta": new_ask
+    "pregunta": new_ask,
+    "ayuda": help
 }
 
 def handle_message(message, user_message:str):
     
     command = user_message.split()[0]
-
-    print(config.ROOT_PATH, config.QUESTIONS_PATH)
     
     if command not in command_list:
-        return f"El comando '{command}' no existe. Para conocer los comandos utilice >ayuda"
+        return {
+            "id": "help",
+            "message": f"Hola! **{message.author.display_name}** creo que te has equivocado :c\nLamentablemente no reconozco el comando **{command}**.\nPuedes revisar la lista de todos los comandos con sus respectivas instrucciones con el siguiente commando: **ayuda**."
+        }
 
     return command_list[command](message)
