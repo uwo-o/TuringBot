@@ -9,5 +9,6 @@ QUESTIONS_PATH = os.path.join(ROOT_PATH, "data/questions/")
 
 # If the reply type is sent privately or in the same channel
 message_privacy = {
-    "question": False
+    "question": False,
+    "help": False
 }
