@@ -26,7 +26,7 @@ def new_ask(message):
 
     question = " ".join(str(message.content).split()[1:])
     
-    with open(f"{config.QUESTIONS_PATH}{str(message.created_at)}.json", "w") as file:
+    with open(f"{os.path.join(config.QUESTIONS_PATH, str(message.created_at))}.json", "w") as file:
         json.dump({
             "id": "question",
             "status": 0,
@@ -60,18 +60,22 @@ De la foma:
 `>pregunta PREGUNTA`. Con este comando puedes crear preguntas dentro del canal designado.
 Se creara una lista de espera, para que los y las ayudantes puedan responder a estas en orden de llegada.
 Cuando su pregunta sea respondida yo me encargare de avisate :D
-`Ejemplo: >pregunta Es esto realmente un ejemplo?`
+`[Ejemplo] >pregunta Es esto realmente un ejemplo?`
 """
 }
 
-
+def not_understood(message):
+    return {"id": "help",
+        "message": f"Hola! **{message.author.display_name}** creo que entendiste mal :c\nDonde escribiste **comando** debe ir al comando que quieras que ejecute :D\nPuedes ver un listado con el usando el comando: **ayuda**."
+}
 '''
 This dictionary has the avalaibles commands as key and their
 respective function as value.
 '''
 command_list = {
     "pregunta": new_ask,
-    "ayuda": help
+    "ayuda": help,
+    "comando": not_understood
 }
 
 def handle_message(message, user_message:str):
