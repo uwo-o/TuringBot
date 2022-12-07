@@ -2,12 +2,34 @@ from dotenv import load_dotenv
 import discord
 import responses
 import config
+import shutil
 import os
 
 # We load the .env file that is located in root path
 load_dotenv()
 
 message_privacy = config.message_privacy
+
+def folder_system_generator(root, folders):
+    '''
+    This function gets a root directory as a start point and a tree of lists of lists and strings where
+    each string is the folder name and the next value in the list is another list that has the children.
+    This way we can create a standard form to create every folder system.
+
+    root --|---> child1 ---> []
+           |---> child2 --|--> grandchild1 --> []
+                          |--> grandchild1 --> []
+    '''
+
+    # We create the actual root
+    os.mkdir(root)
+
+    if not folders:
+        return 0
+
+    for name, children in folders:
+        folder_system_generator(os.path.join(root, name), children)
+    
 
 async def send_message(message, response:str, is_private:bool):
     '''
@@ -32,6 +54,11 @@ def run():
     @client.event
     async def on_ready():
         print(f'{client.user} En servicio!')
+
+    @client.event
+    async def on_guild_join(server):
+        if str(server.id) not in [folder for folder in os.listdir(config.DATA_PATH) if os.path.isdir(config.DATA_PATH+folder)]:
+            folder_system_generator(os.path.join(config.DATA_PATH, str(server.id)), config.GUILD_FOLDERS_SYSTEM)
     
     # When a message is sent we process it    
     @client.event
@@ -53,5 +80,9 @@ def run():
         response = responses.handle_message(message, user_message)
         
         await send_message(message, response["message"], is_private=message_privacy[response["id"]])
+
+    @client.event
+    async def on_guild_remove(server):
+        shutil.rmtree(os.path.join(config.DATA_PATH, str(server.id)))
 
     client.run(os.getenv('TOKEN'))
