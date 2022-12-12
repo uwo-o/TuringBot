@@ -10,6 +10,13 @@ import os
 load_dotenv()
 
 message_privacy = config.message_privacy
+
+async def get_guild_roles_list(message):
+    '''
+    This function gets a message and returns the roles in the guild
+    as a list.
+    '''
+    return await message.guild.roles
     
 async def send_message(message, response:str, is_private:bool):
     '''

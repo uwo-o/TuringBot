@@ -2,6 +2,9 @@ import config
 import json
 import os
 
+def config_roles(message):
+    return 
+
 def new_ask(message):
     '''
     This function generate a JSON file to storage the data for each question,
@@ -68,6 +71,49 @@ def not_understood(message):
     return {"id": "help",
         "message": f"Hola! **{message.author.display_name}** creo que entendiste mal :c\nDonde escribiste **comando** debe ir al comando que quieras que ejecute :D\nPuedes ver un listado con el usando el comando: **ayuda**."
 }
+
+def set_config(message):
+
+    if message.author.id != message.guild.owner.id:
+        return {
+            "id": "config",
+            "message": f"Hola! **{message.author.display_name}** lamentablemente no posees los permisos necesarios para usar este comando :c"
+        }
+
+    config_commands = {
+        "roles": config_roles,
+        "set_questions_channel": 1
+    }
+
+    command = str(message.content).split()[1]
+
+    if command not in config_commands:
+        return {
+            "id": "config",
+            "message": f"""Hola! **{message.author.display_name}** creo que te has equivocado :c
+Lamentablemente no existe la opcion **{command} dentro de las configuraciones
+Esta es la lista completa de los comandos:**
+
+**Roles:**
+`>config roles OPCION`. Con esta opcion podras administrar la configuracion de roles para cada miembro.
+Sus metodos son:
+
+    **get_roles** - Envia una lista con los roles disponibles.
+    **set_admin ROL** - Agrega un determinado rol a la lista de administradores.
+    **rm_admin ROL** - Elimina un determinado rol de la lista de administradores.
+    **set_asistant ROL** -  Agrega un determinado rol a la lista de ayudantes.
+    **rm_assistant ROL** - Elimina un determinado rol de la lista de ayudantes.
+    **set_users ROL** Agrega un determinado rol a la lista de usuarios.
+    **rm_users ROL** ELimina un determinado rol de la lista de usuarios.
+
+**Canal de Preguntas:**
+`>config set_questions_channel NOMBRE`. Este comando recibe el nombre del canal donde se permitiran crear preguntas.
+El canal de preguntas por defecto es: **{config.QUESTIONS_CHANNEL}**
+"""
+        }
+    
+    config_commands[command](message)
+
 '''
 This dictionary has the avalaibles commands as key and their
 respective function as value.
@@ -75,7 +121,8 @@ respective function as value.
 command_list = {
     "pregunta": new_ask,
     "ayuda": help,
-    "comando": not_understood
+    "comando": not_understood,
+    "config": set_config
 }
 
 def handle_message(message, user_message:str):

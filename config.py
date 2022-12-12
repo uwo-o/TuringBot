@@ -19,5 +19,6 @@ GUILD_FOLDERS_SYSTEM = [
 # If the reply type is sent privately or in the same channel
 message_privacy = {
     "question": False,
-    "help": False
+    "help": False,
+    "config": False
 }
