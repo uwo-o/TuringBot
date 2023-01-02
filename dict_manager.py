@@ -2,6 +2,11 @@ import config
 import json
 import os
 
+def get_questions_folder(server):
+    '''
+    This function gets a server and return the path of their questions folder
+    '''
+    return os.path.join(get_guild_folder(server), "questions")
 
 def get_guild_folder(server):
     '''
@@ -21,6 +26,9 @@ def create_guild_conf_file(server):
             "users_rol": [],
             "questions_channel": config.QUESTIONS_CHANNEL
         }, config_file)
+
+def get_guild_conf(message):
+    return json.load(open(os.path.join(get_guild_folder(message.guild),"guild.json")))
 
 def folder_system_generator(root, folders):
     '''
