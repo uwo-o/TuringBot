@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
+import command_manager
 import dict_manager
 import discord
-import responses
 import config
 import shutil
 import os
@@ -57,7 +57,7 @@ def run():
             return
         
         # And the same idea when the message hasn't the command key
-        if str(message.content[0]) != ">":
+        if not str(message.content).startswith(">"):
             return
         
         username = str(message.author.display_name)
@@ -65,7 +65,7 @@ def run():
         channel =  str(message.channel)
 
         # Calls the function that proccess the response in base to the command initiated
-        response = responses.handle_message(message, user_message)
+        response = command_manager.read(message)
         
         await send_message(message, response["message"], is_private=message_privacy[response["id"]])
 
